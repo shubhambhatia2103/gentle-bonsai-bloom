@@ -5,18 +5,15 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { PenIcon, SparklesIcon, WindIcon } from "lucide-react";
-import { motion } from "framer-motion";
-import MoodSelector, { MoodType } from "./MoodSelector";
 
 interface JournalEntryProps {
-  onSave: (entry: string, mood?: MoodType) => void;
+  onSave: (entry: string) => void;
   disabled?: boolean;
 }
 
 const JournalEntry = ({ onSave, disabled = false }: JournalEntryProps) => {
   const [entry, setEntry] = useState("");
   const [isWriting, setIsWriting] = useState(false);
-  const [selectedMood, setSelectedMood] = useState<MoodType>(undefined);
   const { toast } = useToast();
   
   const handleSave = () => {
@@ -29,10 +26,9 @@ const JournalEntry = ({ onSave, disabled = false }: JournalEntryProps) => {
       return;
     }
     
-    onSave(entry, selectedMood);
+    onSave(entry);
     setEntry("");
     setIsWriting(false);
-    setSelectedMood(undefined);
     toast({
       title: "Journal entry saved",
       description: "Your thoughts have been recorded.",
@@ -40,55 +36,43 @@ const JournalEntry = ({ onSave, disabled = false }: JournalEntryProps) => {
   };
   
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-    >
-      <Card className="w-full shadow-sm border-bonsai-sage/20 bg-white/80 backdrop-blur-sm transition-all duration-300">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-lg font-medium flex items-center gap-2">
-            <span className={`text-bonsai-sage transition-transform duration-300 ${isWriting ? 'rotate-[-8deg]' : ''}`}>
-              {isWriting ? <SparklesIcon size={18} /> : <PenIcon size={18} />}
-            </span>
-            Write a Thought
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <MoodSelector 
-            selectedMood={selectedMood} 
-            onSelect={setSelectedMood}
-            className="mb-2"
-          />
-          
-          <Textarea
-            placeholder="Start writing..."
-            className="min-h-[120px] focus:border-bonsai-sage focus:ring-bonsai-sage/20 transition-all duration-300"
-            value={entry}
-            onChange={(e) => {
-              setEntry(e.target.value);
-              setIsWriting(e.target.value.length > 0);
-            }}
-            onFocus={() => setIsWriting(true)}
-            onBlur={() => setIsWriting(entry.length > 0)}
-            disabled={disabled}
-          />
-        </CardContent>
-        <CardFooter className="flex justify-end">
-          <Button 
-            onClick={handleSave} 
-            disabled={disabled || !entry.trim()}
-            className="bg-bonsai-sage hover:bg-bonsai-sage/90 text-foreground group relative overflow-hidden transition-all duration-300"
-          >
-            <span className="relative z-10 flex items-center gap-2">
-              Save Thought
-              <WindIcon size={14} className="opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-x-1" />
-            </span>
-            <span className="absolute inset-0 bg-bonsai-sage/20 transform -translate-x-full group-hover:translate-x-0 transition-all duration-300"></span>
-          </Button>
-        </CardFooter>
-      </Card>
-    </motion.div>
+    <Card className="w-full shadow-sm border-bonsai-sage/20 bg-white/80 backdrop-blur-sm transition-all duration-300">
+      <CardHeader className="pb-2">
+        <CardTitle className="text-lg font-medium flex items-center gap-2">
+          <span className={`text-bonsai-sage transition-transform duration-300 ${isWriting ? 'rotate-[-8deg]' : ''}`}>
+            {isWriting ? <SparklesIcon size={18} /> : <PenIcon size={18} />}
+          </span>
+          Write a Thought
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Textarea
+          placeholder="Start writing..."
+          className="min-h-[120px] focus:border-bonsai-sage focus:ring-bonsai-sage/20 transition-all duration-300"
+          value={entry}
+          onChange={(e) => {
+            setEntry(e.target.value);
+            setIsWriting(e.target.value.length > 0);
+          }}
+          onFocus={() => setIsWriting(true)}
+          onBlur={() => setIsWriting(entry.length > 0)}
+          disabled={disabled}
+        />
+      </CardContent>
+      <CardFooter className="flex justify-end">
+        <Button 
+          onClick={handleSave} 
+          disabled={disabled || !entry.trim()}
+          className="bg-bonsai-sage hover:bg-bonsai-sage/90 text-foreground group relative overflow-hidden transition-all duration-300"
+        >
+          <span className="relative z-10 flex items-center gap-2">
+            Save Thought
+            <WindIcon size={14} className="opacity-0 group-hover:opacity-100 transition-all duration-300 transform group-hover:translate-x-1" />
+          </span>
+          <span className="absolute inset-0 bg-bonsai-sage/20 transform -translate-x-full group-hover:translate-x-0 transition-all duration-300"></span>
+        </Button>
+      </CardFooter>
+    </Card>
   );
 };
 

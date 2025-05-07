@@ -1,6 +1,5 @@
 
 import { JournalEntryType } from "@/components/Insights";
-import { MoodType } from "@/components/MoodSelector";
 
 const STORAGE_KEY = 'digital-bonsai-entries';
 const LAST_GROWTH_DATE_KEY = 'digital-bonsai-last-growth-date';
@@ -20,13 +19,12 @@ export const canGrowTreeToday = (): boolean => {
 };
 
 // Function to save an entry
-export const saveEntry = (content: string, mood?: MoodType): JournalEntryType => {
+export const saveEntry = (content: string): JournalEntryType => {
   const now = new Date();
   const entry: JournalEntryType = {
     id: now.getTime().toString(),
     content,
-    date: now.toISOString(),
-    mood
+    date: now.toISOString()
   };
   
   const existingEntries = getEntries();
@@ -89,38 +87,3 @@ export const hasTreeGrownToday = (): boolean => {
   
   return today === lastDate;
 };
-
-// Function to get most common mood from past entries
-export const getMostCommonMood = (): MoodType | undefined => {
-  const entries = getEntries();
-  const moodCounts: Record<string, number> = {};
-  
-  entries.forEach(entry => {
-    if (entry.mood) {
-      moodCounts[entry.mood] = (moodCounts[entry.mood] || 0) + 1;
-    }
-  });
-  
-  if (Object.keys(moodCounts).length === 0) {
-    return undefined;
-  }
-  
-  return Object.entries(moodCounts).reduce((a, b) => 
-    a[1] > b[1] ? a : b
-  )[0] as MoodType;
-};
-
-// Function to get today's mood (from any entry today)
-export const getTodayMood = (): MoodType | undefined => {
-  const todayEntries = getTodayEntries();
-  
-  // Return the mood of the latest entry that has a mood
-  for (let i = todayEntries.length - 1; i >= 0; i--) {
-    if (todayEntries[i].mood) {
-      return todayEntries[i].mood;
-    }
-  }
-  
-  return undefined;
-};
-
