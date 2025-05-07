@@ -46,3 +46,14 @@ Your bonsai waits patiently, growing only when you’re ready. 🌿
 - Weather & time-based moods (evening, rainy, etc.)  
 - Ambient soundscapes (wind chimes, rain, etc.)
 
+---
+## 💖 Built with Loveable
+
+This project was designed in collaboration with [**Lovable**](https://lovable.dev), a creative platform that helps makers build beautiful and thoughtful web experiences.  
+Their calm-first design philosophy inspired the look, feel, and flow of *Tiny Wins*.
+
+---
+## Contact
+
+[<img target="_blank" src="https://img.icons8.com/bubbles/100/000000/linkedin.png" title="LinkedIn">](https://www.linkedin.com/in/shubhambhatia2103/) [<img target="_blank" src="https://img.icons8.com/bubbles/100/000000/github.png" title="Github">](https://github.com/shubhambhatia2103) [<img target="_blank" src="https://img.icons8.com/bubbles/100/000000/instagram-new.png" title="Instagram">](https://instagram.com/6eingshubham) [<img target="_blank" src="https://img.icons8.com/bubbles/100/000000/twitter-squared.png" title="Twitter">](https://x.com/apmshubham)
+
