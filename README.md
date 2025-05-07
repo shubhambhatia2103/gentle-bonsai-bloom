@@ -1,73 +1,48 @@
-# Welcome to your Lovable project
+# 🌱 Digital Bonsai — Grow with Your Mind
 
-## Project info
+A calming, minimalist journaling web app where your thoughts grow a virtual bonsai tree.  
+No streaks. No pressure. Just slow, intentional growth.  
 
-**URL**: https://lovable.dev/projects/831b0abb-0eaa-44d8-9a6a-8f64453b0809
+Every journal entry is a drop of water. Every breath is sunlight.  
+Your bonsai waits patiently, growing only when you’re ready. 🌿
 
-## How can I edit this code?
+---
 
-There are several ways of editing your application.
+## ✨ Features
 
-**Use Lovable**
+- 🪴 **Mindful Growth**: The bonsai tree grows with one journal per day — no rush, no punishments.  
+- 🛋️ **Minimal UI**: Clean, pastel design with gentle doodles and smooth interactions.  
+- 💬 **Free-Form Journaling**: No prompts or forced structure. Just you and your thoughts.  
+- 🔄 **Optional Reset**: Don’t vibe with today’s journal? You can delete and re-journal.  
+- 📓 **Multiple Entries, One Growth**: Journal as often as you want — the tree grows once daily.  
+- 📊 **Insights (Coming Soon)**: Reflect on your entries with simple, calming visual insights.  
+- 🖥️ **MacBook-style Dock Nav**: A beautiful, animated bottom navbar with Home, Journal & Insights.  
+- 🌸 **Background Doodles**: Subtle, soft illustrations to create a relaxing mood.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/831b0abb-0eaa-44d8-9a6a-8f64453b0809) and start prompting.
 
-Changes made via Lovable will be committed automatically to this repo.
+---
 
-**Use your preferred IDE**
+## 🛠️ Built With
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+- **Frontend**: HTML, CSS, JavaScript  
+- **Font**: [Aguila](https://www.myfonts.com/fonts/sudtipos/aguila/)  
+- **Animations**: CSS + Framer Motion (optional)  
+- **Icons**: Feather Icons / Custom SVGs  
+- **Hosting**: [Vercel / Netlify / Render] *(update accordingly)*
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+---
 
-Follow these steps:
+## 🧘 Philosophy
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+> Digital Bonsai isn’t about productivity. It’s about presence.  
+> Your tree doesn’t grow faster when you do more — it grows when you show up.
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+---
 
-# Step 3: Install the necessary dependencies.
-npm i
+## 🚧 Upcoming Ideas
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+- Emotion-based tree animations  
+- Shared bonsai view with friends (without sharing journal)  
+- Weather & time-based moods (evening, rainy, etc.)  
+- Ambient soundscapes (wind chimes, rain, etc.)
 
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/831b0abb-0eaa-44d8-9a6a-8f64453b0809) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
