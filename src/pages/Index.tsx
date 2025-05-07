@@ -6,7 +6,14 @@ import JournalEntry from "@/components/JournalEntry";
 import Insights from "@/components/Insights";
 import Navigation from "@/components/Navigation";
 import { JournalEntryType } from "@/components/Insights";
-import { getEntries, saveEntry, hasTreeGrownToday, deleteTodayEntries } from "@/services/storageService";
+import { MoodType } from "@/components/MoodSelector";
+import { 
+  getEntries, 
+  saveEntry, 
+  hasTreeGrownToday, 
+  deleteTodayEntries,
+  getTodayMood
+} from "@/services/storageService";
 import { TreeDeciduous, Leaf } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
@@ -16,6 +23,7 @@ const Index = () => {
   const [entries, setEntries] = useState<JournalEntryType[]>([]);
   const [treeHasGrownToday, setTreeHasGrownToday] = useState(false);
   const [timeOfDay, setTimeOfDay] = useState<"morning" | "afternoon" | "evening" | "night">("morning");
+  const [currentMood, setCurrentMood] = useState<MoodType>(undefined);
   const { toast } = useToast();
 
   // Load entries and check if tree has grown today
@@ -26,6 +34,10 @@ const Index = () => {
     
     // Set time of day
     updateTimeOfDay();
+    
+    // Load today's mood
+    const todayMood = getTodayMood();
+    setCurrentMood(todayMood);
     
     // Update time of day periodically
     const interval = setInterval(() => {
@@ -43,11 +55,16 @@ const Index = () => {
     else setTimeOfDay("night");
   };
   
-  const handleSaveEntry = (content: string) => {    
-    const newEntry = saveEntry(content);
+  const handleSaveEntry = (content: string, mood?: MoodType) => {    
+    const newEntry = saveEntry(content, mood);
     
     // Update entries list
     setEntries([...entries, newEntry]);
+    
+    // Update current mood if provided
+    if (mood) {
+      setCurrentMood(mood);
+    }
     
     // Check if this is the first entry of the day (which grows the tree)
     const wasTreeGrownBefore = treeHasGrownToday;
@@ -110,6 +127,20 @@ const Index = () => {
     }
   };
 
+  // Get mood-based additional text
+  const getMoodGreeting = () => {
+    if (!currentMood) return "";
+    
+    switch(currentMood) {
+      case "joyful": return "Your joyfulness is helping your bonsai thrive!";
+      case "calm": return "Your calmness nurtures your bonsai's growth.";
+      case "neutral": return "Your bonsai appreciates your steady presence.";
+      case "sad": return "Your bonsai is here with you through all emotions.";
+      case "stormy": return "Even stormy days help your bonsai grow stronger.";
+      default: return "";
+    }
+  };
+
   return (
     <div className={`min-h-screen bg-gradient-to-br ${getTimeBasedBackground()} flex flex-col transition-colors duration-1000`}>
       <header className="p-4 text-center">
@@ -141,6 +172,9 @@ const Index = () => {
                   : `${entries.length} reflection${entries.length !== 1 ? 's' : ''} so far`
                 }
               </p>
+              {currentMood && (
+                <p className="text-sm mt-1 italic">{getMoodGreeting()}</p>
+              )}
             </motion.div>
             
             <motion.div 
@@ -150,9 +184,14 @@ const Index = () => {
               transition={{ delay: 0.4, duration: 0.6 }}
             >
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-48 h-48 rounded-full bg-bonsai-sage/10 animate-pulse"></div>
+                <div className={`w-48 h-48 rounded-full ${currentMood ? 'bg-bonsai-sky/10' : 'bg-bonsai-sage/10'} animate-pulse`}></div>
               </div>
-              <BonsaiTree entriesCount={entries.length} timeOfDay={timeOfDay} className="z-10" />
+              <BonsaiTree 
+                entriesCount={entries.length} 
+                timeOfDay={timeOfDay} 
+                mood={currentMood} 
+                className="z-10" 
+              />
             </motion.div>
             
             <motion.div 

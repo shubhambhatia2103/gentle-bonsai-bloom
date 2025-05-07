@@ -1,14 +1,15 @@
-
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
+import { MoodType } from "./MoodSelector";
 
 interface BonsaiTreeProps {
   entriesCount: number;
   timeOfDay?: "morning" | "afternoon" | "evening" | "night";
   className?: string;
+  mood?: MoodType;
 }
 
-const BonsaiTree = ({ entriesCount, className, timeOfDay }: BonsaiTreeProps) => {
+const BonsaiTree = ({ entriesCount, className, timeOfDay, mood }: BonsaiTreeProps) => {
   // Define growth stages based on entries count
   const getGrowthStage = () => {
     if (entriesCount === 0) return 0; // Seedling
@@ -25,48 +26,99 @@ const BonsaiTree = ({ entriesCount, className, timeOfDay }: BonsaiTreeProps) => 
   const getTimeBasedColors = () => {
     const time = timeOfDay || getTimeOfDay();
     
+    // Base colors depending on time of day
+    let base = {
+      base: "bg-bonsai-sage/90",
+      highlight: "bg-bonsai-sage/70",
+      shadow: "bg-amber-100/20",
+      pot: "bg-bonsai-pink/70",
+      trunk: "bg-amber-800"
+    };
+    
+    // Adjust base colors by time of day
     switch(time) {
       case "morning":
-        return {
+        base = {
           base: "bg-bonsai-sage/90",
           highlight: "bg-bonsai-sage/70",
           shadow: "bg-amber-100/20",
           pot: "bg-bonsai-pink/70",
           trunk: "bg-amber-800"
         };
+        break;
       case "afternoon":
-        return {
+        base = {
           base: "bg-bonsai-sage",
           highlight: "bg-bonsai-sage/80",
           shadow: "bg-amber-50/30",
           pot: "bg-bonsai-pink/80",
           trunk: "bg-amber-700"
         };
+        break;
       case "evening":
-        return {
+        base = {
           base: "bg-bonsai-sage/80",
           highlight: "bg-bonsai-sage/70",
           shadow: "bg-bonsai-lavender/20",
           pot: "bg-bonsai-pink/90",
           trunk: "bg-amber-900"
         };
+        break;
       case "night":
-        return {
+        base = {
           base: "bg-bonsai-sage/70",
           highlight: "bg-bonsai-sage/60",
           shadow: "bg-bonsai-sky/30",
           pot: "bg-bonsai-pink",
           trunk: "bg-amber-950"
         };
-      default:
-        return {
-          base: "bg-bonsai-sage/90",
-          highlight: "bg-bonsai-sage/70",
-          shadow: "bg-amber-50/20",
-          pot: "bg-bonsai-pink/70",
-          trunk: "bg-amber-800"
-        };
+        break;
     }
+    
+    // Now adjust for mood if provided
+    if (mood) {
+      switch(mood) {
+        case "joyful":
+          return {
+            ...base,
+            base: base.base.replace("bonsai-sage", "amber-300"),
+            highlight: base.highlight.replace("bonsai-sage", "amber-200"),
+            shadow: "bg-yellow-100/30",
+          };
+        case "calm":
+          return {
+            ...base,
+            // Keep the sage color as is for calm
+          };
+        case "neutral":
+          return {
+            ...base,
+            base: base.base.replace("bonsai-sage", "blue-200"),
+            highlight: base.highlight.replace("bonsai-sage", "blue-100"),
+            shadow: "bg-blue-50/20",
+          };
+        case "sad":
+          return {
+            ...base,
+            base: base.base.replace("bonsai-sage", "bonsai-lavender"),
+            highlight: base.highlight.replace("bonsai-sage", "bonsai-lavender"),
+            shadow: "bg-purple-100/20",
+          };
+        case "stormy":
+          return {
+            ...base,
+            base: "bg-gray-400/90",
+            highlight: "bg-gray-300/80",
+            shadow: "bg-gray-200/30",
+            pot: base.pot,
+            trunk: "bg-gray-700",
+          };
+        default:
+          return base;
+      }
+    }
+    
+    return base;
   };
   
   const getTimeOfDay = () => {
@@ -103,8 +155,65 @@ const BonsaiTree = ({ entriesCount, className, timeOfDay }: BonsaiTreeProps) => 
     return () => clearInterval(updateInterval);
   }, []);
 
+  // Get the animation class based on mood
+  const getMoodAnimation = () => {
+    if (!mood) return "";
+    
+    switch(mood) {
+      case "joyful":
+        return "animate-bounce-gentle";
+      case "calm":
+        return "animate-sway-gentle";
+      case "neutral":
+        return ""; // No special animation
+      case "sad":
+        return "animate-droop";
+      case "stormy":
+        return "animate-shake-gentle";
+      default:
+        return "";
+    }
+  };
+
   return (
     <div className={cn("relative flex items-center justify-center h-64", className)}>
+      {/* Mood-specific particles or effects */}
+      {mood === "joyful" && (
+        <div className="absolute inset-0 pointer-events-none">
+          {[...Array(7)].map((_, i) => (
+            <div 
+              key={i}
+              className={cn(
+                "absolute w-1 h-1 rounded-full bg-yellow-300/60 animate-float",
+                i % 2 === 0 ? "left-1/2" : i % 3 === 0 ? "left-1/3" : "left-2/3",
+                i % 3 === 0 ? "bottom-1/2" : i % 2 === 0 ? "bottom-1/4" : "bottom-3/4"
+              )}
+              style={{
+                animationDelay: `${i * 0.3}s`,
+                opacity: Math.random() * 0.7 + 0.3
+              }}
+            ></div>
+          ))}
+        </div>
+      )}
+      
+      {mood === "stormy" && (
+        <div className="absolute inset-0 pointer-events-none">
+          {[...Array(5)].map((_, i) => (
+            <div 
+              key={i}
+              className="absolute w-[1px] h-6 bg-gray-400/60 animate-rain"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 60}%`,
+                animationDelay: `${i * 0.2}s`,
+                transform: "rotate(10deg)"
+              }}
+            ></div>
+          ))}
+        </div>
+      )}
+      
       {/* Subtle light glow effect */}
       <div className={cn("absolute bottom-0 w-28 h-8 rounded-full mx-auto filter blur-md transition-opacity duration-1000", 
         colors.shadow, 
@@ -157,8 +266,9 @@ const BonsaiTree = ({ entriesCount, className, timeOfDay }: BonsaiTreeProps) => 
       {/* Foliage/Leaves */}
       <div
         className={cn(
-          "absolute rounded-full transition-all duration-1000 ease-in-out animate-sway origin-bottom",
+          "absolute rounded-full transition-all duration-1000 ease-in-out origin-bottom",
           colors.base,
+          getMoodAnimation(),
           growthStage === 0 && "w-0 h-0 bottom-12 opacity-0",
           growthStage === 1 && "w-8 h-8 bottom-16",
           growthStage === 2 && "w-16 h-12 bottom-24",
@@ -173,6 +283,7 @@ const BonsaiTree = ({ entriesCount, className, timeOfDay }: BonsaiTreeProps) => 
         <div className={cn(
           "absolute rounded-full transition-all duration-1000 -right-4 animate-float",
           colors.highlight,
+          getMoodAnimation(),
           growthStage === 2 && "w-8 h-6 bottom-20",
           growthStage === 3 && "w-10 h-8 bottom-24",
           growthStage === 4 && "w-12 h-10 bottom-30"
@@ -183,6 +294,7 @@ const BonsaiTree = ({ entriesCount, className, timeOfDay }: BonsaiTreeProps) => 
         <div className={cn(
           "absolute rounded-full transition-all duration-1000 -left-6 animate-float animation-delay-1000",
           colors.highlight,
+          getMoodAnimation(),
           growthStage === 3 && "w-8 h-6 bottom-24",
           growthStage === 4 && "w-10 h-8 bottom-30"
         )}></div>
@@ -191,9 +303,9 @@ const BonsaiTree = ({ entriesCount, className, timeOfDay }: BonsaiTreeProps) => 
       {/* Only show these elements for a full grown bonsai */}
       {growthStage === 4 && (
         <>
-          <div className={cn("absolute rounded-full w-10 h-8 bottom-36 -left-10 animate-float", colors.highlight)}></div>
-          <div className={cn("absolute rounded-full w-8 h-6 bottom-40 left-2 animate-float", colors.highlight)}></div>
-          <div className={cn("absolute rounded-full w-9 h-7 bottom-40 right-0 animate-float", colors.highlight)}></div>
+          <div className={cn("absolute rounded-full w-10 h-8 bottom-36 -left-10 animate-float", colors.highlight, getMoodAnimation())}></div>
+          <div className={cn("absolute rounded-full w-8 h-6 bottom-40 left-2 animate-float", colors.highlight, getMoodAnimation())}></div>
+          <div className={cn("absolute rounded-full w-9 h-7 bottom-40 right-0 animate-float", colors.highlight, getMoodAnimation())}></div>
         </>
       )}
       
