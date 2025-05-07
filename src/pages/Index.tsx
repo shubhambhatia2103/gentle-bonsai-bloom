@@ -6,40 +6,35 @@ import JournalEntry from "@/components/JournalEntry";
 import Insights from "@/components/Insights";
 import Navigation from "@/components/Navigation";
 import { JournalEntryType } from "@/components/Insights";
-import { canSaveEntryToday, getEntries, hasEntryToday, saveEntry } from "@/services/storageService";
-import { getPromptForToday } from "@/services/promptService";
+import { getEntries, saveEntry, hasTreeGrownToday, deleteTodayEntries } from "@/services/storageService";
 import { TreeDeciduous } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState("home");
   const [entries, setEntries] = useState<JournalEntryType[]>([]);
-  const [todayPrompt, setTodayPrompt] = useState("");
-  const [hasAddedToday, setHasAddedToday] = useState(false);
+  const [treeHasGrownToday, setTreeHasGrownToday] = useState(false);
   const { toast } = useToast();
 
-  // Load entries and check if an entry was added today
+  // Load entries and check if tree has grown today
   useEffect(() => {
     const loadedEntries = getEntries();
     setEntries(loadedEntries);
-    setHasAddedToday(hasEntryToday());
-    setTodayPrompt(getPromptForToday());
+    setTreeHasGrownToday(hasTreeGrownToday());
   }, []);
   
-  const handleSaveEntry = (content: string) => {
-    if (!canSaveEntryToday()) {
-      toast({
-        title: "Already journaled today",
-        description: "You can add a new reflection tomorrow",
-        variant: "destructive"
-      });
-      return;
-    }
+  const handleSaveEntry = (content: string) => {    
+    const newEntry = saveEntry(content);
     
-    const newEntry = saveEntry(content, todayPrompt);
-    if (newEntry) {
-      setEntries([...entries, newEntry]);
-      setHasAddedToday(true);
+    // Update entries list
+    setEntries([...entries, newEntry]);
+    
+    // Check if this is the first entry of the day (which grows the tree)
+    const wasTreeGrownBefore = treeHasGrownToday;
+    const isTreeGrownNow = hasTreeGrownToday();
+    
+    if (!wasTreeGrownBefore && isTreeGrownNow) {
+      setTreeHasGrownToday(true);
       
       // Show success animation
       toast({
@@ -49,7 +44,23 @@ const Index = () => {
       
       // Switch to home tab to show tree growth
       setActiveTab("home");
+    } else {
+      toast({
+        title: "Entry saved",
+        description: "Your thought has been recorded.",
+      });
     }
+  };
+  
+  const handleDeleteTodayEntries = () => {
+    deleteTodayEntries();
+    const remainingEntries = getEntries();
+    setEntries(remainingEntries);
+    
+    toast({
+      title: "Today's entries cleared",
+      description: "Your bonsai growth is preserved.",
+    });
   };
 
   return (
@@ -83,21 +94,20 @@ const Index = () => {
             </div>
             
             <div className="w-full">
-              {hasAddedToday ? (
-                <div className="text-center p-4 bg-bonsai-sage/20 rounded-lg">
-                  <p className="font-medium">Today's reflection complete ✓</p>
-                  <p className="text-sm text-muted-foreground mt-1">Return tomorrow to continue growing</p>
-                </div>
-              ) : (
-                <div className="text-center">
-                  <p className="mb-3">Ready to reflect on your day?</p>
-                  <Button
-                    onClick={() => setActiveTab("journal")}
-                    className="bg-bonsai-sage hover:bg-bonsai-sage/90 text-foreground"
-                  >
-                    Write a reflection
-                  </Button>
-                </div>
+              <div className="text-center">
+                <p className="mb-3">Ready to reflect?</p>
+                <Button
+                  onClick={() => setActiveTab("journal")}
+                  className="bg-bonsai-sage hover:bg-bonsai-sage/90 text-foreground"
+                >
+                  Write a thought
+                </Button>
+              </div>
+              
+              {treeHasGrownToday && (
+                <p className="text-center text-sm text-muted-foreground mt-4">
+                  Your bonsai has grown today. It will grow again tomorrow with new reflections.
+                </p>
               )}
             </div>
           </div>
@@ -105,15 +115,11 @@ const Index = () => {
 
         {activeTab === "journal" && (
           <div className="py-4">
-            <h2 className="text-xl font-medium mb-4">Daily Reflection</h2>
-            <JournalEntry 
-              prompt={todayPrompt}
-              onSave={handleSaveEntry}
-              disabled={hasAddedToday}
-            />
-            {hasAddedToday && (
+            <h2 className="text-xl font-medium mb-4">Journal</h2>
+            <JournalEntry onSave={handleSaveEntry} />
+            {treeHasGrownToday && (
               <p className="text-center text-sm text-muted-foreground mt-4">
-                You've already reflected today. Return tomorrow for a new prompt.
+                Your bonsai has already grown today. Continue journaling as much as you wish.
               </p>
             )}
           </div>
@@ -122,7 +128,10 @@ const Index = () => {
         {activeTab === "insights" && (
           <div className="py-4">
             <h2 className="text-xl font-medium mb-4">Your Journey</h2>
-            <Insights entries={entries} />
+            <Insights 
+              entries={entries} 
+              onDeleteTodayEntries={handleDeleteTodayEntries}
+            />
           </div>
         )}
       </main>

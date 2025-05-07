@@ -7,12 +7,11 @@ import { useToast } from "@/hooks/use-toast";
 import { PenIcon } from "lucide-react";
 
 interface JournalEntryProps {
-  prompt: string;
   onSave: (entry: string) => void;
   disabled?: boolean;
 }
 
-const JournalEntry = ({ prompt, onSave, disabled = false }: JournalEntryProps) => {
+const JournalEntry = ({ onSave, disabled = false }: JournalEntryProps) => {
   const [entry, setEntry] = useState("");
   const { toast } = useToast();
   
@@ -30,7 +29,7 @@ const JournalEntry = ({ prompt, onSave, disabled = false }: JournalEntryProps) =
     setEntry("");
     toast({
       title: "Journal entry saved",
-      description: "Your bonsai appreciates your reflection.",
+      description: "Your thoughts have been recorded.",
     });
   };
   
@@ -41,13 +40,12 @@ const JournalEntry = ({ prompt, onSave, disabled = false }: JournalEntryProps) =
           <span className="text-bonsai-sage">
             <PenIcon size={18} />
           </span>
-          Daily Reflection
+          Write a Thought
         </CardTitle>
-        <p className="text-sm text-muted-foreground">{prompt}</p>
       </CardHeader>
       <CardContent>
         <Textarea
-          placeholder="Write your thoughts here..."
+          placeholder="Start writing..."
           className="min-h-[120px] focus:border-bonsai-sage focus:ring-bonsai-sage/20"
           value={entry}
           onChange={(e) => setEntry(e.target.value)}
@@ -60,7 +58,7 @@ const JournalEntry = ({ prompt, onSave, disabled = false }: JournalEntryProps) =
           disabled={disabled || !entry.trim()}
           className="bg-bonsai-sage hover:bg-bonsai-sage/90 text-foreground"
         >
-          Save Reflection
+          Save Thought
         </Button>
       </CardFooter>
     </Card>
