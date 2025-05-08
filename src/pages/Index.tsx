@@ -114,15 +114,15 @@ const Index = () => {
     <div className={`min-h-screen bg-gradient-to-br ${getTimeBasedBackground()} flex flex-col transition-colors duration-1000`}>
       <header className="p-4 text-center">
         <motion.div 
-          className="flex items-center justify-center gap-2"
+          className="flex items-center justify-center gap-2.5 pl-1.5"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
           <TreeDeciduous className="text-bonsai-sage" size={24} />
-          <h1 className="text-2xl font-medium">Digital Bonsai</h1>
+          <h1 className="text-2xl font-medium tracking-wide text-shadow-sm">Digital Bonsai</h1>
         </motion.div>
-        <p className="text-sm text-muted-foreground mt-1">Grow through reflection</p>
+        <p className="text-sm text-muted-foreground mt-1 italic">Grow through reflection</p>
       </header>
       
       <main className="flex-1 container max-w-md mx-auto px-4 pb-16 md:pb-4">
