@@ -34,7 +34,9 @@ export const saveEntry = (content: string): JournalEntryType => {
   
   // If this is the first entry of the day, mark the tree as grown today
   if (canGrowTreeToday()) {
-    localStorage.setItem(LAST_GROWTH_DATE_KEY, now.toISOString());
+    // Store just the date string instead of the full ISO string
+    // This fixes the tree growth tracking between days
+    localStorage.setItem(LAST_GROWTH_DATE_KEY, now.toDateString());
   }
   
   return entry;
@@ -83,7 +85,7 @@ export const hasTreeGrownToday = (): boolean => {
   }
   
   const today = new Date().toDateString();
-  const lastDate = new Date(lastGrowthDate).toDateString();
   
-  return today === lastDate;
+  // Modified to work with the date string format we're now storing
+  return today === lastGrowthDate;
 };
