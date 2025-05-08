@@ -2,6 +2,7 @@
 import { cn } from "@/lib/utils";
 import { BookIcon, HomeIcon, LeafIcon } from "lucide-react";
 import { motion } from "framer-motion";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface NavigationProps {
   activeTab: string;
@@ -14,17 +15,19 @@ const Navigation = ({ activeTab, setActiveTab }: NavigationProps) => {
     { id: "journal", label: "Journal", icon: BookIcon },
     { id: "insights", label: "Insights", icon: LeafIcon },
   ];
+  
+  const isMobile = useIsMobile();
 
   return (
     <motion.nav 
-      className="fixed bottom-6 left-0 right-0 py-2 z-10"
+      className="fixed bottom-4 sm:bottom-6 left-0 right-0 py-2 z-10"
       initial={{ y: 50, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ delay: 0.2, duration: 0.5 }}
     >
       <div className="flex justify-center">
         <motion.div 
-          className="flex gap-3 bg-white/80 backdrop-blur-md px-4 py-2 rounded-full border border-bonsai-sage/20 shadow-lg"
+          className="flex gap-1 sm:gap-3 bg-white/80 backdrop-blur-md px-3 sm:px-4 py-1 sm:py-2 rounded-full border border-bonsai-sage/20 shadow-lg"
           initial={{ scale: 0.95, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.4 }}
@@ -36,7 +39,7 @@ const Navigation = ({ activeTab, setActiveTab }: NavigationProps) => {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={cn(
-                  "flex flex-col items-center px-5 py-2 rounded-full transition-all dock-item relative",
+                  "flex flex-col items-center px-3 sm:px-5 py-1.5 sm:py-2 rounded-full transition-all dock-item relative",
                   isActive 
                     ? "text-foreground dock-item-active"
                     : "text-muted-foreground hover:text-foreground"
@@ -59,7 +62,7 @@ const Navigation = ({ activeTab, setActiveTab }: NavigationProps) => {
                   transition={{ repeat: isActive ? Infinity : 0, repeatType: "reverse", duration: 1.5 }}
                   className="relative"
                 >
-                  <tab.icon size={20} className={cn("mb-1", isActive && "text-bonsai-sage")} />
+                  <tab.icon size={isMobile ? 18 : 20} className={cn("mb-0.5 sm:mb-1", isActive && "text-bonsai-sage")} />
                   {isActive && (
                     <motion.div
                       className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1 w-1 h-1 rounded-full bg-bonsai-sage"

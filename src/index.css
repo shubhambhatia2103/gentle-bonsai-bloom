@@ -58,6 +58,21 @@
     background-image: url("data:image/svg+xml,%3Csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='doodle-pattern' x='0' y='0' width='200' height='200' patternUnits='userSpaceOnUse'%3E%3Cpath d='M20,20 Q40,5 60,20 T100,20' stroke='%23D1E2C4BF' fill='none' stroke-width='1.8'/%3E%3Cpath d='M150,30 C140,50 160,50 150,70' stroke='%23F8D7DABF' fill='none' stroke-width='1.8'/%3E%3Ccircle cx='180' cy='160' r='3.5' fill='%23E0D3EDBF'/%3E%3Ccircle cx='30' cy='150' r='2.5' fill='%23D3E4FDBF'/%3E%3Cpath d='M100,180 C120,170 130,190 150,180' stroke='%23D1E2C4BF' fill='none' stroke-width='1.8'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23doodle-pattern)'/%3E%3C/svg%3E");
     background-attachment: fixed;
   }
+  
+  /* Responsive background doodle scaling */
+  @media (max-width: 768px) {
+    body {
+      background-image: url("data:image/svg+xml,%3Csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='doodle-pattern' x='0' y='0' width='300' height='300' patternUnits='userSpaceOnUse'%3E%3Cpath d='M30,30 Q60,7.5 90,30 T150,30' stroke='%23D1E2C4BF' fill='none' stroke-width='1.8'/%3E%3Cpath d='M225,45 C210,75 240,75 225,105' stroke='%23F8D7DABF' fill='none' stroke-width='1.8'/%3E%3Ccircle cx='270' cy='240' r='3.5' fill='%23E0D3EDBF'/%3E%3Ccircle cx='45' cy='225' r='2.5' fill='%23D3E4FDBF'/%3E%3Cpath d='M150,270 C180,255 195,285 225,270' stroke='%23D1E2C4BF' fill='none' stroke-width='1.8'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23doodle-pattern)'/%3E%3C/svg%3E");
+      background-size: 300px 300px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    body {
+      background-image: url("data:image/svg+xml,%3Csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3E%3Cdefs%3E%3Cpattern id='doodle-pattern' x='0' y='0' width='400' height='400' patternUnits='userSpaceOnUse'%3E%3Cpath d='M40,40 Q80,10 120,40 T200,40' stroke='%23D1E2C4BF' fill='none' stroke-width='1.8'/%3E%3Cpath d='M300,60 C280,100 320,100 300,140' stroke='%23F8D7DABF' fill='none' stroke-width='1.8'/%3E%3Ccircle cx='360' cy='320' r='4' fill='%23E0D3EDBF'/%3E%3Ccircle cx='60' cy='300' r='3' fill='%23D3E4FDBF'/%3E%3Cpath d='M200,360 C240,340 260,380 300,360' stroke='%23D1E2C4BF' fill='none' stroke-width='1.8'/%3E%3C/pattern%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23doodle-pattern)'/%3E%3C/svg%3E");
+      background-size: 400px 400px;
+    }
+  }
 }
 
 @layer utilities {

@@ -10,6 +10,7 @@ import { getEntries, saveEntry, hasTreeGrownToday, deleteTodayEntries } from "@/
 import { TreeDeciduous, Leaf } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { motion } from "framer-motion";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState("home");
@@ -17,6 +18,7 @@ const Index = () => {
   const [treeHasGrownToday, setTreeHasGrownToday] = useState(false);
   const [timeOfDay, setTimeOfDay] = useState<"morning" | "afternoon" | "evening" | "night">("morning");
   const { toast } = useToast();
+  const isMobile = useIsMobile();
 
   // Load entries and check if tree has grown today
   useEffect(() => {
@@ -114,18 +116,20 @@ const Index = () => {
     <div className={`min-h-screen bg-gradient-to-br ${getTimeBasedBackground()} flex flex-col transition-colors duration-1000`}>
       <header className="p-4 text-center">
         <motion.div 
-          className="flex items-center justify-center gap-2.5 pl-1.5"
+          className="flex flex-col sm:flex-row items-center justify-center gap-2.5 pl-1.5"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
-          <TreeDeciduous className="text-bonsai-sage" size={24} />
-          <h1 className="text-2xl font-medium tracking-wide text-shadow-sm">Digital Bonsai</h1>
+          <div className="flex items-center gap-2.5">
+            <TreeDeciduous className="text-bonsai-sage" size={isMobile ? 20 : 24} />
+            <h1 className="text-xl sm:text-2xl font-medium tracking-wide text-shadow-sm">Digital Bonsai</h1>
+          </div>
+          <p className="text-xs sm:text-sm text-muted-foreground mt-1 italic sm:ml-1">Grow through reflection</p>
         </motion.div>
-        <p className="text-sm text-muted-foreground mt-1 italic">Grow through reflection</p>
       </header>
       
-      <main className="flex-1 container max-w-md mx-auto px-4 pb-16 md:pb-4">
+      <main className="flex-1 container max-w-md mx-auto px-4 pb-20 sm:pb-16 md:pb-4">
         {activeTab === "home" && (
           <div className="flex flex-col items-center justify-center h-full">
             <motion.div 
@@ -134,8 +138,8 @@ const Index = () => {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2, duration: 0.6 }}
             >
-              <h2 className="text-xl font-medium mb-2">{getTimeBasedGreeting()}</h2>
-              <p className="text-sm text-muted-foreground">
+              <h2 className="text-lg sm:text-xl font-medium mb-2">{getTimeBasedGreeting()}</h2>
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 {entries.length === 0 
                   ? "Plant your first reflection to start growing" 
                   : `${entries.length} reflection${entries.length !== 1 ? 's' : ''} so far`
@@ -144,13 +148,13 @@ const Index = () => {
             </motion.div>
             
             <motion.div 
-              className="relative w-full h-72 flex items-center justify-center mb-6"
+              className="relative w-full h-64 sm:h-72 flex items-center justify-center mb-6"
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 0.4, duration: 0.6 }}
             >
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-48 h-48 rounded-full bg-bonsai-sage/10 animate-pulse"></div>
+                <div className="w-40 sm:w-48 h-40 sm:h-48 rounded-full bg-bonsai-sage/10 animate-pulse"></div>
               </div>
               <BonsaiTree entriesCount={entries.length} timeOfDay={timeOfDay} className="z-10" />
             </motion.div>
@@ -162,21 +166,21 @@ const Index = () => {
               transition={{ delay: 0.6, duration: 0.6 }}
             >
               <div className="text-center">
-                <p className="mb-3">Ready to reflect?</p>
+                <p className="text-sm sm:text-base mb-3">Ready to reflect?</p>
                 <Button
                   onClick={() => setActiveTab("journal")}
                   className="bg-bonsai-sage hover:bg-bonsai-sage/90 text-foreground group relative overflow-hidden"
                 >
                   <span className="relative z-10 flex items-center gap-2">
                     Write a thought
-                    <Leaf size={14} className="transition-transform group-hover:rotate-12" />
+                    <Leaf size={isMobile ? 12 : 14} className="transition-transform group-hover:rotate-12" />
                   </span>
                   <span className="absolute inset-0 bg-bonsai-sage/20 transform -translate-x-full group-hover:translate-x-0 transition-all duration-300"></span>
                 </Button>
               </div>
               
               {treeHasGrownToday && (
-                <p className="text-center text-sm text-muted-foreground mt-4">
+                <p className="text-center text-xs sm:text-sm text-muted-foreground mt-4">
                   Your bonsai has grown today. It will grow again tomorrow with new reflections.
                 </p>
               )}
@@ -191,10 +195,10 @@ const Index = () => {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.4 }}
           >
-            <h2 className="text-xl font-medium mb-4">Journal</h2>
+            <h2 className="text-lg sm:text-xl font-medium mb-4">Journal</h2>
             <JournalEntry onSave={handleSaveEntry} />
             {treeHasGrownToday && (
-              <p className="text-center text-sm text-muted-foreground mt-4">
+              <p className="text-center text-xs sm:text-sm text-muted-foreground mt-4">
                 Your bonsai has already grown today. Continue journaling as much as you wish.
               </p>
             )}
@@ -208,7 +212,7 @@ const Index = () => {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.4 }}
           >
-            <h2 className="text-xl font-medium mb-4">Your Journey</h2>
+            <h2 className="text-lg sm:text-xl font-medium mb-4">Your Journey</h2>
             <Insights 
               entries={entries} 
               onDeleteTodayEntries={handleDeleteTodayEntries}
